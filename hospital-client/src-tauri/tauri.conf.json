@@ -3,8 +3,8 @@
   "build": {
     "beforeBuildCommand": "",
     "beforeDevCommand": "",
-    "devPath": "Set automatically by Vue CLI plugin",
-    "distDir": "Set automatically by Vue CLI plugin"
+    "devPath": "../dist",
+    "distDir": "../dist"
   },
   "package": {
     "productName": "hospital-client",
@@ -58,7 +58,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "HelpVoice - Hospital",
+        "title": "HelpVoice",
         "width": 800
       }
     ]
