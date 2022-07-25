@@ -7,6 +7,7 @@ audio_model = None
 
 @app.post("/transcribe_audio")
 def get_transcription():
+    ## AQUÍ VA LO DE SANDRA
     return {"transcription":"ok"}
 
 
