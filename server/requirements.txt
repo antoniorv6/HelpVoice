@@ -1,5 +1,6 @@
 torch
-torchaudios
+torchaudio
 transformers
 fastapi[all]
 scikit-learn
+pandas
