@@ -32,7 +32,7 @@ class Hosp_Dist_Calc:
         for i in range(self.data.shape[0]):
             lat_h = self.data.iloc[i]['LATITUD']
             long_h = self.data.iloc[i]['LONGITUD']
-            d = self.distancia_puntos(self.lat_p, self.long_p)
+            d = self.distancia_puntos(lat_h, long_h)
             lista_dist.append(d)
         return lista_dist
 
