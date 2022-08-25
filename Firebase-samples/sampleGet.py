@@ -1,4 +1,3 @@
-from gc import DEBUG_SAVEALL
 import firebase_admin
 from firebase_admin import db
 from firebase_admin import credentials
