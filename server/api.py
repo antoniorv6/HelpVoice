@@ -5,12 +5,14 @@ import uvicorn
 from fastapi import FastAPI
 from Wav2Vec import AudioTranscription
 from distance import Hosp_Dist_Calc
+from DiseasePredictor import DiseasePredictor
 from db_connection import DBModule
 import os
 import base64
 
 audio_model = AudioTranscription("facebook/wav2vec2-large-xlsr-53-spanish") 
 distance_module = Hosp_Dist_Calc("data/datos_hospitales.csv")
+disease_pred = DiseasePredictor()
 app = FastAPI()
 
 @app.post("/transcribe_audio")
@@ -22,9 +24,12 @@ async def get_transcription(client_id: int = Form(), lat: float = Form(), lon: f
         wavfile.write(audiostring)
     
     transcription = audio_model(f"audio_files/{client_id}.wav")
+    illness = disease_pred([{'diarrea'}])[0]
+
     response_dict = {
         "hospitals": hospitals_dict,
-        "transcription": transcription["text"]
+        "transcription": transcription["text"],
+        "sick": illness
     }
     return response_dict
 
