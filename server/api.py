@@ -1,5 +1,3 @@
-from glob import glob
-from turtle import distance
 from fastapi import Form
 import uvicorn
 from fastapi import FastAPI
@@ -13,6 +11,7 @@ import base64
 audio_model = AudioTranscription("facebook/wav2vec2-large-xlsr-53-spanish") 
 distance_module = Hosp_Dist_Calc("data/datos_hospitales.csv")
 disease_pred = DiseasePredictor()
+db_api = DBModule()
 app = FastAPI()
 
 @app.post("/transcribe_audio")
@@ -29,8 +28,12 @@ async def get_transcription(client_id: int = Form(), lat: float = Form(), lon: f
     response_dict = {
         "hospitals": hospitals_dict,
         "transcription": transcription["text"],
-        "sick": illness
+        "sickness_prediction": illness
     }
+
+    ##Tenemos que mandar alertas a los hospitales
+    
+
     return response_dict
 
 def launch():
