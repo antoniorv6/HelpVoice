@@ -42,7 +42,7 @@ async def get_transcription(client_id: int = Form(), lat: float = Form(), lon: f
 
 @app.get("/test_rabbitmq")
 def rbmq_test():
-    RabbitMQModule.send_message('hello world')
+    rbmq_manager.send_message(message='El paciente esta malito')
     return {"message": "ok"}
 
 def launch():

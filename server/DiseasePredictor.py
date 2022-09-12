@@ -3,7 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn import preprocessing
 from sklearn.preprocessing import MultiLabelBinarizer
 
-class DiseasePredictor():
+class DiseasePredictor:
     def __init__(self) -> None:
         with open('data/data.json', 'r') as f:
             data = json.load(f)
