@@ -10,7 +10,7 @@ engine.setProperty('voice', 'spanish+f4')
 
 # API config
 
-url = 'amqps://tzpumyto:JSCw3UBKC1mnpUPgqZ_S8miEAKLXuiVQ@rat.rmq2.cloudamqp.com/tzpumyto'
+
 
 def saySomething(text):
     engine.say(text)
@@ -25,10 +25,10 @@ def action():
      saySomething('Dime')
      
      while True:
-        counter+=1
-        print(counter)
         if not button.is_pressed:
-            data[''] = 
+            data = dict()
+            data['client_id'] = 131233 # Set by default
+
             saySomething('De acuerdo. No se preocupe, la ambulancia está de camino')
             break
     
@@ -36,17 +36,3 @@ def action():
 while True:
     if button.is_pressed:
         action()
-"""
-print('Lets go')
-p= Process(target=action, args=())
-while True:
-    input_state = gpio.input(18)
-    print('jje')
-    if input_state == False:
-        recoding = True
-        p.start()
-        
-        time.sleep(0.2)
-    else:
-        recoding = False
-"""
