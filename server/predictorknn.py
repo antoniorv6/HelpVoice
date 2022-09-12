@@ -5,6 +5,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn import preprocessing
 from sklearn.utils import resample
 from transformers import BertModel, BertTokenizerFast
+import pickle
+
 
 tokenizer = BertTokenizerFast.from_pretrained("setu4993/LaBSE")
 model = BertModel.from_pretrained("setu4993/LaBSE")
@@ -40,6 +42,8 @@ lb = preprocessing.LabelBinarizer()
 y = list(data.keys())
 y = lb.fit_transform(y)
 
+pickle.dump(lb, open('models/lb.sav', 'wb'))
+
 # Codificación X (Sintomas)
 
 X = list(data.values())
@@ -48,6 +52,10 @@ X = codifyX(X)
 # Entrenamos modelo        
 clf = KNeighborsClassifier(n_neighbors=1)
 clf.fit(X, y)
+
+# Guardamos modelo
+filename = 'models/knn_model.sav'
+pickle.dump(clf, open(filename, 'wb'))
 
 
 # Testeamos las predicciones

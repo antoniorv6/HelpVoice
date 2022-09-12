@@ -2,7 +2,6 @@ import json
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import preprocessing
 from sklearn.preprocessing import MultiLabelBinarizer
-from sklearn.utils import resample
 
 class DiseasePredictor():
     def __init__(self) -> None:
