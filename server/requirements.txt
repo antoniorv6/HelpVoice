@@ -1,6 +1,7 @@
 torch
 torchaudio
 transformers
-fastapi[all]
+uvicorn
 scikit-learn
 pandas
+pika
