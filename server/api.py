@@ -57,10 +57,14 @@ class RabbitMQManager:
         logger.info(alert_dict)
     
     def start_listening(self):
+        logger.success("Server connections correctly initialized")
         self.channel.start_consuming()
     
+    @logger.catch
     def stop(self):
-        self.channel.close()
+        logger.info("Closing server...")
+        if self.channel.is_open:
+            self.channel.close()
 
 
 
@@ -108,7 +112,6 @@ def launch():
             rbmq_manager.stop()
             sys.exit(0)
         except SystemExit:
-            rbmq_manager.stop()
             os._exit(0)
 
 if __name__ == "__main__":
