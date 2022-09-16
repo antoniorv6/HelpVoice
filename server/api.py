@@ -54,6 +54,7 @@ class RabbitMQManager:
             "sickness_prediction": illness
         }
 
+        logger.success("Patient alert processed correctly, obtained the following info")
         logger.info(alert_dict)
     
     def start_listening(self):

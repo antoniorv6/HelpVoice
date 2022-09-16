@@ -8,8 +8,11 @@ channel = connection.channel()
 channel.queue_declare(queue='patient_alerts')
 channel.queue_declare(queue='hospital_comms')
 
-channel.basic_publish(exchange='', routing_key='patient_alerts', body=json.dumps({"client_id":1234, "audio":"adsfasdf jaiosfjaseiof jaiof hjasdofiu hasdo fiuahdsfija"}))
-channel.basic_publish(exchange='', routing_key='hospital_comms', body='Mensaje de hospital!')
+audio_test_content = None
+with open('audio_test.txt') as audio_txt:
+    audio_test_content = audio_txt.read()
+
+channel.basic_publish(exchange='', routing_key='patient_alerts', body=json.dumps({"client_id":1234, "lat":10.0, "lon":10.0, "audio":audio_txt}))
 
 print(" [x] Sent 'Hello World!'")
 connection.close()
