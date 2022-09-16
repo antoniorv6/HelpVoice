@@ -14,6 +14,7 @@ logger.info("Initializing server add-ons")
 audio_model = AudioTranscription("facebook/wav2vec2-large-xlsr-53-spanish") 
 distance_module = Hosp_Dist_Calc("data/datos_hospitales.csv")
 disease_pred = DiseasePredictor()
+#db_api = DBModule()
 logger.success("Server add-ons initialized correctly")
 
 class RabbitMQManager:
@@ -66,42 +67,6 @@ class RabbitMQManager:
         logger.info("Closing server...")
         if self.channel.is_open:
             self.channel.close()
-
-
-
-#db_api = DBModule()
-
-#async def get_transcription(client_id, lat, lon, audio):
-#    hospitals_dict = distance_module(lat, lon, 5)
-#    os.makedirs("audio_files", exist_ok=True)
-#    audiostring = base64.b64decode(audio)
-#    with open(f"audio_files/{client_id}.wav", "wb") as wavfile:
-#        wavfile.write(audiostring)
-#    
-#    transcription = audio_model(f"audio_files/{client_id}.wav")
-#    illness = disease_pred([{'diarrea'}])[0]
-#
-#    alert_dict = {
-#        "user_id": client_id,
-#        "alerted_hospitals": hospitals_dict,
-#        "audio_file": f"audio_files/{client_id}.wav",
-#        "transcription": transcription["text"],
-#        "sickness_prediction": illness
-#    }
-#
-#    ##Tenemos que mandar alertas a los hospitales
-#    #db_api.post('/alerts', alert_dict)
-#
-#    return {"status":"correct"}
-
-#async def rbmq_test():
-#    rbmq_manager.send_message(message='El paciente esta malito')
-#    return {"message": "ok"}
-
-#def app():
-    #audio_model = AudioTranscription("facebook/wav2vec2-large-xlsr-53-spanish") 
-    #distance_module = Hosp_Dist_Calc("data/datos_hospitales.csv")
-    #disease_pred = DiseasePredictor()
     
 def launch():
     try:
