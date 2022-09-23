@@ -36,7 +36,6 @@ class RabbitMQManager:
     @staticmethod
     @logger.catch
     def consume_patient_message(ch, method, properties, body):
-        logger.info(f"{body}")
         request = json.loads(body)
         hospitals_dict = distance_module(request["lat"], request["lon"], 5)
         os.makedirs("audio_files", exist_ok=True)
