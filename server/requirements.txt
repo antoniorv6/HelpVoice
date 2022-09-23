@@ -1,6 +1,4 @@
-torch
-torchaudio
-transformers
+git+https://github.com/openai/whisper.git 
 uvicorn
 scikit-learn
 pandas
