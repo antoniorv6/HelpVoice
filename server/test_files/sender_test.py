@@ -14,5 +14,5 @@ with open('audio_test.txt') as audio_txt:
 
 channel.basic_publish(exchange='', routing_key='patient_alerts', body=json.dumps({"client_id":1234, "lat":10.0, "lon":10.0, "audio":audio_test_content}))
 
-print(" [x] Sent 'Hello World!'")
+
 connection.close()
