@@ -71,7 +71,7 @@ def action():
             data['audio'] = enc.decode('utf-8')
             sendMessage(data)
 
-            playsound(audio_path + audios['ok'])
+            playsound(audios['ok'])
 
             break
 
