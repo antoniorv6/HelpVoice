@@ -9,12 +9,13 @@ from scipy.io.wavfile import write
 import wavio as wv
 from base64 import b64encode
 import numpy as np
+import sys, os
 
 # Config usuario
 user_id = 'yERXYCKKtDN3b9aXNip4s9GWS1z1'
 
 # Voice config
-audio_path = "./audios/"
+audio_path = sys.path.append(os.path.join(os.path.dirname(__file__), '..', '/audios/')
 audios = {}
 audios['start'] = "recibido.mp3"
 audios['ok'] = "ok.mp3"
@@ -27,12 +28,10 @@ channel = connection.channel()
 # Creamos cola con el id del paciente
 channel.queue_declare(user_id)
 
-# Se conecta el exchange de pacientes y hospitales
-
 def playsound(file):
     pygame.mixer.music.load(audio_path + file)
     pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy():  # wait for music to finish playing
+    while pygame.mixer.music.get_busy():
         time.sleep(1)
 
 def sendMessage(msg):
