@@ -68,7 +68,7 @@ def action():
             data['client_id'] = user_id
             data['lat'] = 40.4477155
             data['lon'] = -3.6954323
-            data['audio'] = enc
+            data['audio'] = enc.decode('utf-8')
             sendMessage(data)
 
             playsound(audio_path + audios['ok'])
@@ -77,7 +77,7 @@ def action():
 
 
 while True:
-    action()
-    time.sleep(5)
+    if button.is_pressed:
+        action()
 
 connection.close()
