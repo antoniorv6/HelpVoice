@@ -15,7 +15,7 @@ import sys, os
 user_id = 'yERXYCKKtDN3b9aXNip4s9GWS1z1'
 
 # Voice config
-audio_path = sys.path.append(os.path.join(os.path.dirname(__file__), '..', '/audios/')
+audio_path = sys.path.append(os.path.join(os.path.dirname(__file__), '..', '/audios/'))
 audios = {}
 audios['start'] = "recibido.mp3"
 audios['ok'] = "ok.mp3"
