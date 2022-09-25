@@ -11,7 +11,7 @@ from DiseasePredictor import DiseasePredictor
 
 
 logger.info("Initializing server add-ons")
-audio_model = AudioTranscription("facebook/wav2vec2-large-xlsr-53-spanish") 
+audio_model = AudioTranscription() 
 distance_module = Hosp_Dist_Calc("data/datos_hospitales.csv")
 disease_pred = DiseasePredictor()
 #db_api = DBModule()
@@ -20,7 +20,6 @@ logger.success("Server add-ons initialized correctly")
 class RabbitMQManager:
     @logger.catch
     def __init__(self) -> None:
-        logger.info("Initializing server connections")
         self.connection = pika.BlockingConnection(pika.URLParameters('amqps://tzpumyto:JSCw3UBKC1mnpUPgqZ_S8miEAKLXuiVQ@rat.rmq2.cloudamqp.com/tzpumyto'))
         self.channel = self.connection.channel()
         

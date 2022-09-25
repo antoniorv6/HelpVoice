@@ -2,7 +2,7 @@ import whisper
 from loguru import logger
 class AudioTranscription:
     @logger.catch
-    def __init__(self, model_name) -> None:
+    def __init__(self) -> None:
         self.model = whisper.load_model("base")
         
     @logger.catch            
