@@ -12,7 +12,10 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "all": true,
+      "notification": {
+        "all": true
+      }
     },
     "bundle": {
       "active": true,
@@ -56,10 +59,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
-        "resizable": true,
+        "height": 720,
+        "resizable": false,
         "title": "hospital-client",
-        "width": 800
+        "width": 1280
       }
     ]
   }
