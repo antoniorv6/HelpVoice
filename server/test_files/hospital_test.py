@@ -13,12 +13,12 @@ with open('audio_test.txt') as audio_txt:
     audio_test_content = audio_txt.read()
 
 request_body = {
-    "user": "usuario1234",
-    "transcription":"Me duele mucho todo, ayuda por favor. Me encuentro fatal",
+    "user": "usuariomongolardo",
+    "transcription":"Me duele mucho todo, pero ando mas flexin con mis panas sisi.",
     "audio_path":"audio_usuario1234.wav",
     "diagnostico": "ulcera",
-    "level": "Prioridad Alta",
-    "level_int": 0,
+    "level": "Prioridad Media",
+    "level_int": 1,
     "coordinates": [203.45, 112.345]
 }
 

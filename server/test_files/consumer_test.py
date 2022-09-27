@@ -4,7 +4,7 @@ def main():
     connection = pika.BlockingConnection(pika.URLParameters('amqps://tzpumyto:JSCw3UBKC1mnpUPgqZ_S8miEAKLXuiVQ@rat.rmq2.cloudamqp.com/tzpumyto'))
     channel = connection.channel()
 
-    result = channel.queue_declare(queue='', exclusive=True)
+    result = channel.queue_declare(queue='cliente1', exclusive=True)
 
     channel.queue_bind(exchange='alerts', queue=result.method.queue)
 
