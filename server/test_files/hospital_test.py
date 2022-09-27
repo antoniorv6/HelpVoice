@@ -12,7 +12,17 @@ audio_test_content = None
 with open('audio_test.txt') as audio_txt:
     audio_test_content = audio_txt.read()
 
-channel.basic_publish(exchange='hospitals', routing_key='hospital1', body="hello")
+request_body = {
+    "user": "usuario1234",
+    "transcription":"Me duele mucho todo, ayuda por favor. Me encuentro fatal",
+    "audio_path":"audio_usuario1234.wav",
+    "diagnostico": "ulcera",
+    "level": "Prioridad Alta",
+    "level_int": 0,
+    "coordinates": [203.45, 112.345]
+}
+
+channel.basic_publish(exchange='hospitals', routing_key='hospital1', body=json.dumps(request_body))
 
 
 connection.close()

@@ -15,6 +15,13 @@
       "all": true,
       "notification": {
         "all": true
+      },
+      "fs":{
+        "all": true,
+        "scope": ["$APP/*", "$DESKTOP/*"]
+      },
+      "path":{
+        "all": true
       }
     },
     "bundle": {

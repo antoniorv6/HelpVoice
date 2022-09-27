@@ -15,7 +15,8 @@
     "bootstrap": "^5.2.1",
     "bootstrap-vue": "^2.22.0",
     "node-sass": "^7.0.3",
-    "vue": "^3.2.37"
+    "vue": "^3.2.37",
+    "vue-sessionstorage": "^1.0.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.1.0",
