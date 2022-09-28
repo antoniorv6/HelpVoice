@@ -11,8 +11,8 @@ fn greet(name: &str) -> String {
 
 use std::collections::BTreeMap;
 use std::thread;
-use amiquip::{Connection, Exchange, Publish, ConsumerMessage, ConsumerOptions, QueueDeclareOptions, Result, ExchangeType, ExchangeDeclareOptions};
-use tauri::{Manager, App, Window};
+use amiquip::{Connection, Publish, ConsumerMessage, ConsumerOptions, QueueDeclareOptions, Result, ExchangeType, ExchangeDeclareOptions};
+use tauri::{Manager, Window};
 
 // the payload type must implement `Serialize` and `Clone`.
 #[derive(Clone, serde::Serialize)]

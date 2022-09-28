@@ -31,8 +31,9 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
     },
     data(){ return {
       numNotifications : 0,
-      unattendedNotifications: [],
-      attendedNotifications: [],
+      unots: [],
+      anots: [],
+      onots: [],
       notifications_listener: null,
       appState: 0,
       visualized_alert: 0
@@ -50,7 +51,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
       store_notification: async function(notificationContent){
         const notification_object = await JSON.parse(notificationContent)
         this.numNotifications += 1;
-        this.unattendedNotifications.push(notification_object)
+        this.unots.push(notification_object)
         console.log("Notification correctly propagated")
         await this.saveStateSnapshot()
       },
@@ -66,15 +67,17 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
         const content = await readTextFile("./data/state.json", {dir: BaseDirectory.Desktop})
         const jsonContent = await JSON.parse(content)
         this.numNotifications = jsonContent.numNotifications
-        this.unattendedNotifications = jsonContent.unattendedNotifications
-        this.attendedNotifications = jsonContent.attendedNotifications
+        this.unots = jsonContent.unots
+        this.onots = jsonContent.onots
+        this.anots = jsonContent.anots
       },
       saveStateSnapshot: async function(){
         try{
           let jsonData = {
             numNotifications: this.numNotifications,
-            unattendedNotifications: this.unattendedNotifications,
-            attendedNotifications: this.attendedNotifications
+            unots: this.unots,
+            anots: this.anots,
+            onots: this.onots
           }
           writeFile("./data/state.json",
             `${JSON.stringify(jsonData)}`,
@@ -90,9 +93,15 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
       visualize_alert: function (alert_number, visualized) {
         console.log(`You are visualizing alert ${alert_number}`)
         if(!visualized)
-          this.visualized_alert = this.unattendedNotifications[alert_number]
+        {
+          this.visualized_alert = this.unots[alert_number]
+          this.unots.splice(alert_number,1)
+          this.onots.push(this.visualized_alert)
+          this.numNotifications -= 1
+          this.saveStateSnapshot()
+        }
         else
-          this.visualized_alert = this.attendedNotifications[alert_number]
+          this.visualized_alert = this.anots[alert_number]
 
         this.appState = 1
       },
@@ -113,21 +122,21 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
       <span class="fs-4">Help Voice!</span>
     </a>
     <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul class="nav nav-pills flex-column mb-auto ">
       <li class="nav-item">
         <a href="#" class="nav-link active" aria-current="page" id="Home">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-          Inicio <span class="badge bg-danger">{{this.numNotifications}}</span>
+          Inicio <span v-if="this.numNotifications > 0" class="badge bg-danger">{{this.numNotifications}}</span>
         </a>
       </li>
-      <li>
-        <a href="#" class="nav-link text-white" id="Alerts">
+      <li class="nav-item">
+        <a href="#" class="nav-link link-light" id="Alerts">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
           Alertas
         </a>
       </li>
-      <li>
-        <a href="#" class="nav-link text-white " id="History">
+      <li class="nav-item">
+        <a href="#" class="nav-link link-light" id="History">
           <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
           Historiales
         </a>
@@ -149,8 +158,24 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
         </div>
       </div>
       <div class="row">
-        <div v-for="(alert, index) in this.unattendedNotifications" class="col-4">
-          <div class="card" style="min-height: 250px;">
+        <div v-for="(alert, index) in this.unots" class="col-4">
+          <div class="card" style="min-height: 250px; max-height: 250px;">
+            <div class="card-body">
+              <h5 class="card-title">{{alert.level}} 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="darkred" class="bi bi-circle-fill" viewBox="0 0 16 16" style="margin-left: 3.5em;">
+                <circle cx="8" cy="8" r="8"/>
+              </svg>
+              </h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{alert.user}}</h6>
+              <p class="card-text">{{alert.transcription}}</p>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-primary btn-lg" v-on:click="this.visualize_alert(index)">Detalles</button>
+            </div>
+          </div>
+        </div>
+        <div v-for="(alert, index) in this.onots" class="col-4">
+          <div class="card" style="min-height: 250px; max-height: 250px;">
             <div class="card-body">
               <h5 class="card-title">{{alert.level}}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{alert.user}}</h6>

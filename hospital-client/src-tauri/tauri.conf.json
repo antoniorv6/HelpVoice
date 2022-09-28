@@ -39,7 +39,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.helpvoice.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -68,7 +68,7 @@
         "fullscreen": false,
         "height": 720,
         "resizable": false,
-        "title": "hospital-client",
+        "title": "HelpVoice! Hospitals",
         "width": 1280
       }
     ]
