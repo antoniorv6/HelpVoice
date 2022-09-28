@@ -101,7 +101,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
           this.saveStateSnapshot()
         }
         else
-          this.visualized_alert = this.anots[alert_number]
+          this.visualized_alert = this.onots[alert_number]
 
         this.appState = 1
       },
@@ -170,7 +170,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
               <p class="card-text">{{alert.transcription}}</p>
             </div>
             <div class="card-footer">
-              <button type="button" class="btn btn-primary btn-lg" v-on:click="this.visualize_alert(index)">Detalles</button>
+              <button type="button" class="btn btn-primary btn-lg" v-on:click="this.visualize_alert(index, false)">Detalles</button>
             </div>
           </div>
         </div>
@@ -182,7 +182,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
               <p class="card-text">{{alert.transcription}}</p>
             </div>
             <div class="card-footer">
-              <button type="button" class="btn btn-primary btn-lg" v-on:click="this.visualize_alert(index)">Detalles</button>
+              <button type="button" class="btn btn-primary btn-lg" v-on:click="this.visualize_alert(index, true)">Detalles</button>
             </div>
           </div>
         </div>
