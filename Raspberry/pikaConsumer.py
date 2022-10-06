@@ -5,10 +5,10 @@ import threading
 
 # Some configuration variables
 RABBIT_URL = 'amqps://tzpumyto:JSCw3UBKC1mnpUPgqZ_S8miEAKLXuiVQ@rat.rmq2.cloudamqp.com/tzpumyto'
-ROUTING_KEY = 'yERXYCKKtDN3b9aXNip4s9GWS1z1'
+ROUTING_KEY = ''
 QUEUE_NAME = ROUTING_KEY
-EXCHANGE = 'patients'
-THREADS = 5
+EXCHANGE = 'yERXYCKKtDN3b9aXNip4s9GWS1z1'
+THREADS = 2
 
 class ThreadedConsumer(threading.Thread):
     def __init__(self):

@@ -1,34 +1,18 @@
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import Greet from "./components/Greet.vue";
+import MapeCom from './components/MapeCom.vue';
+
 import { emit, listen } from '@tauri-apps/api/event'
 import { sendNotification } from '@tauri-apps/api/notification';
 import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri-apps/api/fs";
+
 </script>
 
 <script>
   import {ref} from 'vue'
   let modalEle= ref(null);
   export default {
-    setup() {
-      const center = ref([-98.8449,19.6869])
-      const projection = ref('EPSG:4326')
-      const zoom = ref(15)
-      const rotation = ref(0)
-      const radius = ref(40)
-      const strokeWidth = ref(10)
-      const strokeColor = ref('red')
-
-      return {
-          center,
-          projection,
-          zoom,
-          rotation,
-          radius,
-          strokeWidth,
-          strokeColor,
-      }
+    components:{
+      MapeCom
     },
     data(){ return {
       numNotifications : 0,
@@ -37,7 +21,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
       onots: [],
       notifications_listener: null,
       appState: 0,
-      visualized_alert: 0
+      visualized_alert: 0,
     }},
     mounted() {
       this.notifications_listener = listen('new_alert', (event) => {
@@ -177,6 +161,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
           </div>
         </div>
         <div v-for="(alert, index) in this.onots" class="col-4">
+          
           <div class="card" style="min-height: 250px; max-height: 250px;">
             <div class="card-body" style="overflow: hidden;">
               <h5 class="card-title">{{alert.level}}</h5>
@@ -218,28 +203,8 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
           <h5>Mensaje recibido:</h5>
           <p class="lead">{{this.visualized_alert.transcription}}</p>
           <h5>Ubicación del paciente:</h5>
-            <ol-map :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true" style="height:400px">
-
-            <ol-view ref="view" :center="center" :rotation="rotation" :zoom="zoom" :projection="projection" />
-                    
-            <ol-tile-layer>
-                <ol-source-osm />
-            </ol-tile-layer>
-          
-            <ol-vector-layer>
-                <ol-source-vector>
-                    <ol-feature>
-                        <ol-geom-polygon :coordinates="[[[-98.844959,19.691586],[-98.842749,19.690980],[-98.842170,19.693122],[-98.844358,19.693667],[-98.844959,19.691586]]]"></ol-geom-polygon>
-                        <ol-style>
-                            <ol-style-stroke :color="strokeColor" :width="strokeWidth"></ol-style-stroke>
-                        </ol-style>
-                    </ol-feature>
-                
-                </ol-source-vector>
-            
-            </ol-vector-layer>
-          
-          </ol-map>
+          {{visualized_alert.coordinates}}
+           <MapeCom :coordinates="visualized_alert.coordinates" />
           <hr class="my-4">
           <p class="lead">
           <button class="btn btn-success btn-lg" href="#" role="button" style="margin-right: 1em;" v-on:click="this.send_message(this.visualized_alert.user_id)">Atender alerta</button>
@@ -248,11 +213,10 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
         </div>
       </div>
     </div>
-    
 
   </div>
 </div>
-  
+
 </template>
 
 <style scoped>
@@ -265,4 +229,15 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
     padding: 10px 20px;
     font-size: 16px;
 }
+
+.map-wrap {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 77px); /* calculate height of the screen minus the heading */
+}
+  .map{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+ }
 </style>
