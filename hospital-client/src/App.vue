@@ -9,6 +9,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
 
 <script>
   import {ref} from 'vue'
+  let modalEle= ref(null);
   export default {
     setup() {
       const center = ref([-98.8449,19.6869])
@@ -106,8 +107,9 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
         this.appState = 1
       },
       send_message: function(body){
-        console.log("Sending alert")
-        emit("send_rbmq", {theMessage: 'Tauri is awesome!'})
+        console.log("yepa")
+        console.log(body)
+        emit("send_rbmq", body)
       }
     }
   }
@@ -166,7 +168,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
                 <circle cx="8" cy="8" r="8"/>
               </svg>
               </h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{alert.user}}</h6>
+              <h6 class="card-subtitle mb-2 text-muted">{{alert.user_id}}</h6>
               <p class="card-text">{{alert.transcription}}</p>
             </div>
             <div class="card-footer">
@@ -176,10 +178,12 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
         </div>
         <div v-for="(alert, index) in this.onots" class="col-4">
           <div class="card" style="min-height: 250px; max-height: 250px;">
-            <div class="card-body">
+            <div class="card-body" style="overflow: hidden;">
               <h5 class="card-title">{{alert.level}}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{alert.user}}</h6>
-              <p class="card-text">{{alert.transcription}}</p>
+              <h6 class="card-subtitle mb-2 text-muted">{{alert.user_id}}</h6>
+              <p class="card-text">
+                {{alert.transcription}}
+              </p>
             </div>
             <div class="card-footer">
               <button type="button" class="btn btn-primary btn-lg" v-on:click="this.visualize_alert(index, true)">Detalles</button>
@@ -208,9 +212,9 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
           <div v-if="this.visualized_alert.level_int==2" class="alert alert-primary" role="alert">
             <b>Nivel de emergencia bajo</b>
           </div>
-          <h2 class="display-4">{{this.visualized_alert.user}}</h2>
+          <h2 class="display-4">{{this.visualized_alert.user_id}}</h2>
           <h5>Enfermedad diagnosticada:</h5>
-          <p class="lead">{{this.visualized_alert.diagnostico}}</p>
+          <p class="lead">{{this.visualized_alert.sickness_prediction}}</p>
           <h5>Mensaje recibido:</h5>
           <p class="lead">{{this.visualized_alert.transcription}}</p>
           <h5>Ubicación del paciente:</h5>
@@ -238,7 +242,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
           </ol-map>
           <hr class="my-4">
           <p class="lead">
-          <button class="btn btn-success btn-lg" href="#" role="button" style="margin-right: 1em;" v-on:click="this.send_message('Hello brother')">Atender alerta</button>
+          <button class="btn btn-success btn-lg" href="#" role="button" style="margin-right: 1em;" v-on:click="this.send_message(this.visualized_alert.user_id)">Atender alerta</button>
           <button class="btn btn-danger btn-lg" href="#" role="button">Rechazar alerta</button>
           </p>
         </div>

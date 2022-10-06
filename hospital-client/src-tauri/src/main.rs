@@ -13,6 +13,7 @@ use std::collections::BTreeMap;
 use std::thread;
 use amiquip::{Connection, Publish, ConsumerMessage, ConsumerOptions, QueueDeclareOptions, Result, ExchangeType, ExchangeDeclareOptions};
 use tauri::{Manager, Window};
+use serde;
 
 // the payload type must implement `Serialize` and `Clone`.
 #[derive(Clone, serde::Serialize)]
@@ -21,6 +22,9 @@ struct Payload {
 }
 
 fn rbmq_send_message(payload:Option<&str>) -> Result<()>{
+    let value = payload.unwrap();
+    println!("{:?}", value);
+
     let mut connection = Connection::insecure_open("amqps://tzpumyto:JSCw3UBKC1mnpUPgqZ_S8miEAKLXuiVQ@rat.rmq2.cloudamqp.com/tzpumyto")?;
 
     // Open a channel - None says let the library choose the channel ID.
@@ -30,7 +34,7 @@ fn rbmq_send_message(payload:Option<&str>) -> Result<()>{
     let exchange = channel.exchange_declare(ExchangeType::Fanout, "alerts", ExchangeDeclareOptions::default())?;
 
     // Publish a message to the "hello" queue.
-    exchange.publish(Publish::new("hello there".as_bytes(), "cliente1"))?;
+    exchange.publish(Publish::new("{'hospital':'Hospital la paz', 'coordinates': [98.24, 54.03], 'prediction': 'COVID 19', 'action': 'Ambulancia'}".as_bytes(), value))?;
 
     connection.close()
 }
@@ -77,12 +81,12 @@ fn rbmq_connect(mut connection:Connection, window: Window) -> Result<()> {
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            let mut connection = Connection::insecure_open("amqps://tzpumyto:JSCw3UBKC1mnpUPgqZ_S8miEAKLXuiVQ@rat.rmq2.cloudamqp.com/tzpumyto");
-
             //app.unlisten(id);
             let id = app.listen_global("send_rbmq", |event| {
                 rbmq_send_message(event.payload());
             });
+
+            let mut connection = Connection::insecure_open("amqps://tzpumyto:JSCw3UBKC1mnpUPgqZ_S8miEAKLXuiVQ@rat.rmq2.cloudamqp.com/tzpumyto");
             
             let res = match connection {
                     Ok(connection) => {
