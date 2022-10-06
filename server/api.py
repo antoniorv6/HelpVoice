@@ -47,11 +47,12 @@ class RabbitMQManager:
 
         alert_dict = {
             "user_id": request['client_id'],
-            "alerted_hospitals": hospitals_dict,
             "audio_file": f"audio_files/{request['client_id']}.wav",
             "transcription": transcription["text"],
             "sickness_prediction": illness
         }
+
+        ch.basic_publish(exchange='hospitals', routing_key='hospital1', body=json.dumps(alert_dict))
 
         logger.success("Patient alert processed correctly, obtained the following info")
         logger.info(alert_dict)
