@@ -16,10 +16,10 @@ import {ref} from 'vue';
 
     setup (props) {
       const coordinate = props.coordinates
-      console.log(coordinate)
+
       const mapContainer = shallowRef(null);
       let map = shallowRef(null);
-      console.log(coordinate)
+  
       
   
        onMounted(async () => {

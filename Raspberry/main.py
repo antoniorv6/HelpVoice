@@ -44,7 +44,7 @@ def sendMessage(msg):
 
 # Comenzamos a consumir
 consumer = ThreadedConsumer()
-consumer.run()
+#consumer.run()
 #button = Button(18)
 
 def action():
@@ -71,7 +71,6 @@ def action():
         data['lon'] = -3.6954323
         data['audio'] = enc.decode('utf-8')
         sendMessage(data)
-
         playsound(audios['ok'])
 
         break

@@ -203,8 +203,8 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
           <h5>Mensaje recibido:</h5>
           <p class="lead">{{this.visualized_alert.transcription}}</p>
           <h5>Ubicación del paciente:</h5>
-          {{visualized_alert.coordinates}}
-           <MapeCom :coordinates="visualized_alert.coordinates" />
+          aa{{visualized_alert.coordinates}}
+           <MapeCom :coordinates="[visualized_alert.lon, visualized_alert.lat]" />
           <hr class="my-4">
           <p class="lead">
           <button class="btn btn-success btn-lg" href="#" role="button" style="margin-right: 1em;" v-on:click="this.send_message(this.visualized_alert.user_id)">Atender alerta</button>
