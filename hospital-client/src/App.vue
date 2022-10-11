@@ -4,12 +4,13 @@ import MapeCom from './components/MapeCom.vue';
 import { emit, listen } from '@tauri-apps/api/event'
 import { sendNotification } from '@tauri-apps/api/notification';
 import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri-apps/api/fs";
+import { getDatabase, ref, onValue } from 'firebase/database'
 
 </script>
 
 <script>
-  import {ref} from 'vue'
-  let modalEle= ref(null);
+  //import {ref} from 'vue'
+  //let modalEle= ref(null);
   export default {
     components:{
       MapeCom
@@ -25,8 +26,20 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
     }},
     mounted() {
       this.notifications_listener = listen('new_alert', (event) => {
+        
+       event.payload = JSON.parse(event.payload)
+       
+        const db = getDatabase()
+        const settingsRef = ref(db, '/users/' +event.payload['user_id'])
+        onValue(settingsRef, function(snapshot) {
+         
+          var childData = snapshot.val();
+          event.payload.personal = childData
+        
+        });
+
         this.store_notification(event.payload)
-        sendNotification({title: 'Nueva alerta', body:event.payload})
+        sendNotification({title: 'Nueva alerta', body:JSON.stringify(event.payload)})
 
       }
         )
@@ -34,7 +47,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
       },
     methods: {
       store_notification: async function(notificationContent){
-        const notification_object = await JSON.parse(notificationContent)
+        const notification_object = notificationContent
         this.numNotifications += 1;
         this.unots.push(notification_object)
         console.log("Notification correctly propagated")
@@ -94,8 +107,19 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
         console.log("yepa")
         console.log(body)
         emit("send_rbmq", body)
-      }
+      },
+      alert_color(a) {
+        if(a==0){
+          return 'h_alert'
+        }else if(a==1){
+          return 'm_alert'
+        }else{
+          return 'l_alert'
+        }
+
     }
+    },
+
   }
 </script>
 
@@ -147,15 +171,15 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
         <div v-for="(alert, index) in this.unots" class="col-4">
           <div class="card" style="min-height: 250px; max-height: 250px;">
             <div class="card-body">
-              <h5 class="card-title">{{alert.level}} 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="darkred" class="bi bi-circle-fill" viewBox="0 0 16 16" style="margin-left: 3.5em;">
+              <h5 class="card-title" :class="alert_color(alert.level_int)">{{alert.level}} 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-circle-fill" viewBox="0 0 16 16" style="margin-left: 3.5em;">
                 <circle cx="8" cy="8" r="8"/>
               </svg>
               </h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{alert.user_id}}</h6>
+              <h6 class="card-subtitle mb-2 text-muted">{{alert.sickness_prediction}}</h6>
               <p class="card-text">{{alert.transcription}}</p>
             </div>
-            <div class="card-footer">
+            <div class="card-footer text-end">
               <button type="button" class="btn btn-primary btn-lg" v-on:click="this.visualize_alert(index, false)">Detalles</button>
             </div>
           </div>
@@ -164,13 +188,13 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
           
           <div class="card" style="min-height: 250px; max-height: 250px;">
             <div class="card-body" style="overflow: hidden;">
-              <h5 class="card-title">{{alert.level}}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{alert.user_id}}</h6>
+              <h5 class="card-title" :class="alert_color(alert.level_int)">{{alert.level}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{alert.sickness_prediction}}</h6>
               <p class="card-text">
                 {{alert.transcription}}
               </p>
             </div>
-            <div class="card-footer">
+            <div class="card-footer text-end">
               <button type="button" class="btn btn-primary btn-lg" v-on:click="this.visualize_alert(index, true)">Detalles</button>
             </div>
           </div>
@@ -181,7 +205,7 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
       <div class="row">
         <div class="jumbotron p-3">
           <button type="button" class="btn btn-outline-secondary" v-on:click="this.appState=0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" class="bi bi-arrow-left" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
           </svg>
           Atrás
@@ -197,31 +221,77 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
           <div v-if="this.visualized_alert.level_int==2" class="alert alert-primary" role="alert">
             <b>Nivel de emergencia bajo</b>
           </div>
-          <h2 class="display-4">{{this.visualized_alert.user_id}}</h2>
-          <h5>Enfermedad diagnosticada:</h5>
-          <p class="lead">{{this.visualized_alert.sickness_prediction}}</p>
-          <h5>Mensaje recibido:</h5>
-          <p class="lead">{{this.visualized_alert.transcription}}</p>
-          <h5>Ubicación del paciente:</h5>
-          aa{{visualized_alert.coordinates}}
-           <MapeCom :coordinates="[visualized_alert.lon, visualized_alert.lat]" />
-          <hr class="my-4">
-          <p class="lead">
+    
+          <div class="container">
+            <div class="row">
+            <div class="col">
+           
+             <h5>Datos paciente</h5>
+             <div class="row ms-1">
+              <span class="text-muted">Nombre</span>
+              <p>{{this.visualized_alert.personal.name}}</p>
+            </div>
+            <div class="row ms-1">
+              <div class="col">
+                <span class="text-muted">Edad</span>
+                <p>{{this.visualized_alert.personal.Edad}}</p>
+              </div>
+              <div class="col">
+                <span class="text-muted">Sexo</span>
+                <p> {{this.visualized_alert.personal.Sexo}}</p>
+              </div>
+            </div>
+
+            <div class="row ms-1">
+              <div class="col">
+                  <span class="text-muted">Dirección</span>
+                  <p>C. de Orense, 4, 28020 Madrid</p>
+              </div>
+              <div class="col">
+                <span class="text-muted">Contacto</span>
+               <p>{{this.visualized_alert.personal.phone}}</p>
+              </div>
+            </div>
+
+              <h5>Mensaje recibido</h5>
+              <p class="ms-3">{{this.visualized_alert.transcription}}</p>
+              <h5>Audio mensaje</h5>
+              <audio controls>
+                <source src="https://file-examples.com/storage/feb2e515cc6339d7ba1ffcd/2017/11/file_example_MP3_700KB.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+              </audio>
+              <h5>Diagnostico</h5>
+              <p class="ms-3">{{this.visualized_alert.sickness_prediction}}</p>
+              
+              <hr class="my-4">
+              <p class="lead">
           <button class="btn btn-success btn-lg" href="#" role="button" style="margin-right: 1em;" v-on:click="this.send_message(this.visualized_alert.user_id)">Atender alerta</button>
           <button class="btn btn-danger btn-lg" href="#" role="button">Rechazar alerta</button>
           </p>
+          </div>
+
+            <div class="col">
+              <MapeCom :coordinates="[visualized_alert.lon, visualized_alert.lat]" />
+            </div>
+          </div>
+        </div>
+        </div>
+       
+        </div>
+          
         </div>
       </div>
     </div>
 
-  </div>
-</div>
+
+
 
 </template>
 
 <style scoped>
   html{
     height: 100%;
+    
   }
   .overlay-content {
     background: #efefef;
@@ -240,4 +310,26 @@ import { BaseDirectory, createDir, writeFile, readTextFile, exists} from "@tauri
   width: 100%;
   height: 100%;
  }
+  
+  h5{
+    color: #252525 !important;
+  }
+
+  .h_alert{
+    background-color: #ff0054 !important;
+    color: white !important;
+    padding: .5em;
+  }
+
+  .m_alert{
+    background-color: #f4a261 !important;
+    color: white !important;
+    padding: .5em;
+  }
+
+  .l_alert{
+    background-color: #8ecae6 !important;
+    color: white !important;
+    padding: .5em;
+  }
 </style>

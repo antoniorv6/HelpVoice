@@ -7,7 +7,7 @@ cred = credentials.Certificate('firebase-key.json')
 default_app = firebase_admin.initialize_app(cred,  {'databaseURL': 'https://helpvoice-aporta-default-rtdb.europe-west1.firebasedatabase.app'})
 
 # Obtenemos la base de datos de alertas
-db_alerts = db.reference('/alerts')
+db_users = db.reference('/users')
 
 # La estructura es la siguientes 
 # /alerts/id_usuario/id_alerta/datos_alerta
@@ -17,7 +17,7 @@ db_alerts = db.reference('/alerts')
 # https://firebase.google.com/docs/database/admin/retrieve-data?hl=es-419
 
 # Recorremos todas las alertas
-for user in db_alerts.get():
-    for alert in db_alerts.get()[user]:
-        for key in db_alerts.get()[user][alert].items():
-            print(key)
+id = 'yERXYCKKtDN3b9aXNip4s9GWS1z1'
+
+for key in db_users.get()[id].items():
+    print(key)

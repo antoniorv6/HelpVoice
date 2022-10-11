@@ -14,9 +14,7 @@ import os
 user_id = 'yERXYCKKtDN3b9aXNip4s9GWS1z1'
 
 # Voice config
-print(__file__)
 audio_path = os.path.join(os.path.dirname(__file__) ,'audios/')
-print(audio_path)
 audios = {}
 audios['start'] = "recibido.mp3"
 audios['ok'] = "ok.mp3"
@@ -72,6 +70,7 @@ def action():
         data['audio'] = enc.decode('utf-8')
         sendMessage(data)
         playsound(audios['ok'])
+        consumer.run()
 
         break
 
