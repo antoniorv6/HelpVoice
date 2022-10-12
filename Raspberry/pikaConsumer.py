@@ -1,7 +1,7 @@
 import json
 import pika
 import time
-import threading
+
 import pygame
 import os
 
@@ -14,9 +14,9 @@ EXCHANGE = 'yERXYCKKtDN3b9aXNip4s9GWS1z1'
 THREADS = 2
 # Voice config
 
-class ThreadedConsumer(threading.Thread):
+class ThreadedConsumer():
     def __init__(self):
-        threading.Thread.__init__(self)
+
         parameters = pika.URLParameters(RABBIT_URL)
         connection = pika.BlockingConnection(parameters)
         self.channel = connection.channel()
@@ -24,7 +24,7 @@ class ThreadedConsumer(threading.Thread):
         self.channel.queue_bind(queue=QUEUE_NAME, exchange=EXCHANGE, routing_key=ROUTING_KEY)
         self.channel.basic_qos(prefetch_count=THREADS*10)
         self.channel.basic_consume(QUEUE_NAME, on_message_callback=self.callback)
-        threading.Thread(target=self.channel.basic_consume(QUEUE_NAME, on_message_callback=self.callback))
+        self.channel.basic_consume(QUEUE_NAME, on_message_callback=self.callback)
         self.audio_path = os.path.join(os.path.dirname(__file__) ,'audios/')
         self.audios = {}
 
@@ -36,7 +36,6 @@ class ThreadedConsumer(threading.Thread):
         body = body.decode().replace("\'", "\"")
         message = json.loads(body)
         time.sleep(1)
-        print(message)
         channel.basic_ack(delivery_tag=method.delivery_tag)
         self.stop()
         self.playsound(self.audios['ambulancia'])
