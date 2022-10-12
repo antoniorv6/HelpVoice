@@ -49,7 +49,11 @@ class RabbitMQManager:
             "user_id": request['client_id'],
             "audio_file": f"audio_files/{request['client_id']}.wav",
             "transcription": transcription["text"],
-            "sickness_prediction": illness
+            "sickness_prediction": illness,
+            "level_int": 0,
+            "level": "Prioridad alta",
+            "lat":request["lat"],
+            "lon":request["lon"]
         }
 
         ch.basic_publish(exchange='hospitals', routing_key='hospital1', body=json.dumps(alert_dict))
