@@ -11,7 +11,7 @@ fn greet(name: &str) -> String {
 
 use std::collections::BTreeMap;
 use std::thread;
-use amiquip::{Connection, Publish, ConsumerMessage, ConsumerOptions, QueueDeclareOptions, Result, ExchangeType, ExchangeDeclareOptions};
+use amiquip::{Connection, Publish, ConsumerMessage, ConsumerOptions, QueueDeclareOptions, Result, ExchangeType, Exchange, ExchangeDeclareOptions};
 use tauri::{Manager, Window};
 use serde;
 
@@ -31,10 +31,10 @@ fn rbmq_send_message(payload:Option<&str>) -> Result<()>{
     let channel = connection.open_channel(None)?;
 
     // Get a handle to the direct exchange on our channel.
-    let exchange = channel.exchange_declare(ExchangeType::Fanout, "yERXYCKKtDN3b9aXNip4s9GWS1z1", ExchangeDeclareOptions::default())?;
+    let exchange = Exchange::direct(&channel);
 
     // Publish a message to the "hello" queue.
-    exchange.publish(Publish::new("{'hospital':'Hospital la paz', 'coordinates': [98.24, 54.03], 'prediction': 'COVID 19', 'action': 'Ambulancia'}".as_bytes(), value))?;
+    exchange.publish(Publish::new(value.as_bytes(), "hospital_response"))?;
 
     connection.close()
 }
