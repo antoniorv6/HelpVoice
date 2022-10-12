@@ -16,8 +16,8 @@ user_id = 'yERXYCKKtDN3b9aXNip4s9GWS1z1'
 # Voice config
 audio_path = os.path.join(os.path.dirname(__file__) ,'audios/')
 audios = {}
-audios['start'] = "recibido.mp3"
-audios['ok'] = "ok.mp3"
+audios['start'] = "1.mp3"
+audios['ok'] = "2.mp3"
 pygame.mixer.init()
 
 # RabitMQ config
@@ -42,8 +42,8 @@ def sendMessage(msg):
 
 # Comenzamos a consumir
 consumer = ThreadedConsumer()
-#consumer.run()
-#button = Button(18)
+
+button = Button(18)
 
 def action():
     #global button
@@ -76,8 +76,8 @@ def action():
 
 
 while True:
-    #if button.is_pressed:
-    action()
-    break
+    if button.is_pressed:
+        action()
+
 
 connection.close()

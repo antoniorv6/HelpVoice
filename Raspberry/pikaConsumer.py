@@ -27,8 +27,8 @@ class ThreadedConsumer(threading.Thread):
         threading.Thread(target=self.channel.basic_consume(QUEUE_NAME, on_message_callback=self.callback))
         self.audio_path = os.path.join(os.path.dirname(__file__) ,'audios/')
         self.audios = {}
-        self.audios['hospital'] = "recibido_hospital.mp3"
-        self.audios['ambulancia'] = "ambulancia.mp3"
+
+        self.audios['ambulancia'] = "3.mp3"
         pygame.mixer.init()
 
     def callback(self, channel, method, properties, body):
@@ -39,7 +39,6 @@ class ThreadedConsumer(threading.Thread):
         print(message)
         channel.basic_ack(delivery_tag=method.delivery_tag)
         self.stop()
-        self.playsound(self.audios['hospital'])
         self.playsound(self.audios['ambulancia'])
         
     def run(self):
