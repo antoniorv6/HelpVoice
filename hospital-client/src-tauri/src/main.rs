@@ -31,7 +31,7 @@ fn rbmq_send_message(payload:Option<&str>) -> Result<()>{
     let channel = connection.open_channel(None)?;
 
     // Get a handle to the direct exchange on our channel.
-    let exchange = channel.exchange_declare(ExchangeType::Fanout, "alerts", ExchangeDeclareOptions::default())?;
+    let exchange = channel.exchange_declare(ExchangeType::Fanout, "yERXYCKKtDN3b9aXNip4s9GWS1z1", ExchangeDeclareOptions::default())?;
 
     // Publish a message to the "hello" queue.
     exchange.publish(Publish::new("{'hospital':'Hospital la paz', 'coordinates': [98.24, 54.03], 'prediction': 'COVID 19', 'action': 'Ambulancia'}".as_bytes(), value))?;

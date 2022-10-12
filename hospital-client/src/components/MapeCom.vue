@@ -16,10 +16,10 @@ import {ref} from 'vue';
 
     setup (props) {
       const coordinate = props.coordinates
-      console.log(coordinate)
+
       const mapContainer = shallowRef(null);
       let map = shallowRef(null);
-      console.log(coordinate)
+  
       
   
        onMounted(async () => {
@@ -60,8 +60,7 @@ import {ref} from 'vue';
   .map{
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 500px;
  }
-
 
   </style>
