@@ -43,7 +43,7 @@ def sendMessage(msg):
 # Comenzamos a consumir
 consumer = ThreadedConsumer()
 consumer.start()
-#button = Button(18)
+button = Button(18)
 
 def action():
     #global button
@@ -57,26 +57,26 @@ def action():
         sd.wait()
         recording = np.append(recording, tmp)
         
-        #if not button.is_pressed:
-        wv.write("recording1.wav", recording, freq, sampwidth=2)
-        f=open("recording1.wav", "rb")
-        enc=b64encode(f.read())
-        f.close()
+        if not button.is_pressed:
+            wv.write("recording1.wav", recording, freq, sampwidth=2)
+            f=open("recording1.wav", "rb")
+            enc=b64encode(f.read())
+            f.close()
 
-        data = {}
-        data['client_id'] = user_id
-        data['lat'] = 40.4477155
-        data['lon'] = -3.6954323
-        data['audio'] = enc.decode('utf-8')
-        sendMessage(data)
-        playsound(audios['ok'])
-        break
+            data = {}
+            data['client_id'] = user_id
+            data['lat'] = 40.4477155
+            data['lon'] = -3.6954323
+            data['audio'] = enc.decode('utf-8')
+            sendMessage(data)
+            playsound(audios['ok'])
+            break
 
 
 while True:
-    #if button.is_pressed:
-    action()
-    break
+    if button.is_pressed:
+        action()
+
 
 
 connection.close()
