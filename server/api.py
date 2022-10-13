@@ -4,7 +4,7 @@ import os
 import base64
 import json
 import sys
-
+import requests
 from Wav2Vec import AudioTranscription
 from distance import Hosp_Dist_Calc
 from DiseasePredictor import DiseasePredictor
@@ -16,6 +16,26 @@ distance_module = Hosp_Dist_Calc("data/datos_hospitales.csv")
 disease_pred = DiseasePredictor()
 #db_api = DBModule()
 logger.success("Server add-ons initialized correctly")
+
+def alertFamily():
+    headers={'Accept': 'application/json', 
+        'Authorization': 'key=AAAAoZTf-J0:APA91bHCsxJymN-5ZVFPYzWJQ5ZaEBFC2gWhs2DLutcP6flxMVxTaZKXXVqNxtaUKeOOTgcJo5RTlJiZZGgjZDnR5jFtAFR_slJ_d9Gpf_eWzMUKSLEWvJ2mBl2oaOxE2DyjULNefI8r'
+    }
+    data = {
+    "to":"cKVVzWkqRhCdM2bAvN7T_h:APA91bGaSOjJOsm-JLgNFfep-1pOOnUyGti7q2Sh5cgDYE0MNJk_pIJ_4nW5UNbQC7vnEs4qGnN21-RdxdzA7b0Zwx-1pyH1ebbK0oCO4z90TE-G3BM1AuTIULC7tWwIfU1HCRDQ-YDX",
+    "notification":{
+        "title":"HelpVoice! - Nueva alerta",
+        "body":"Alberto Berenguer"
+    },
+    "data":{
+        "lat":40.4477155,
+        "lon": -3.6954323,
+        "status": "Una ambulancia está en camino",
+        "pred": "Rotura de cadera"
+    }
+    }
+    requests.post('https://fcm.googleapis.com/fcm/send', json = data,
+    headers = headers)
 
 class RabbitMQManager:
     @logger.catch
@@ -70,7 +90,9 @@ class RabbitMQManager:
     def consume_hospital_response(ch, method, properties, body):
         jsondata = json.loads(body)
         ch.basic_publish(exchange=jsondata['user_id'], routing_key='', body=body)
+        alertFamily()
         logger.success("Hospital response correctly redirected to user")
+
     
     def start_listening(self):
         logger.success("Server connections correctly initialized")

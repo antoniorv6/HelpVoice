@@ -11,13 +11,14 @@ def alertFamily():
     },
     "data":{
         "lat":40.4477155,
-        "lon": -3.6954323
+        "lon": -3.6954323,
+        "status": "Una ambulancia está en camino",
+        "pred": "Rotura de cadera"
     }
-}
-    response = requests.post('https://fcm.googleapis.com/fcm/send', json = data,
+    }
+    requests.post('https://fcm.googleapis.com/fcm/send', json = data,
     headers = headers)
 
-    print(response.json())
 
 
 
