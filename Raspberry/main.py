@@ -45,7 +45,7 @@ def alertFamily():
         "lon": -3.6954323
     }
 }
-    request.post('https://fcm.googleapis.com/fcm/send', data = data,
+    requests.post('https://fcm.googleapis.com/fcm/send', data = data,
     headers = headers)
 
 def playsound(file):
