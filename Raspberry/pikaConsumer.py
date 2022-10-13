@@ -23,7 +23,7 @@ class ThreadedConsumer(threading.Thread):
         self.channel.queue_declare(queue=QUEUE_NAME, auto_delete=False)
         self.channel.queue_bind(queue=QUEUE_NAME, exchange=EXCHANGE, routing_key=ROUTING_KEY)
         self.channel.basic_qos(prefetch_count=THREADS*10)
-        self.channel.basic_consume(QUEUE_NAME, on_message_callback=self.callback, no_ack=True)
+        self.channel.basic_consume(QUEUE_NAME, on_message_callback=self.callback)
         threading.Thread(target=self.channel.basic_consume(QUEUE_NAME, on_message_callback=self.callback))
         self.audio_path = os.path.join(os.path.dirname(__file__) ,'audios/')
         self.audios = {}
