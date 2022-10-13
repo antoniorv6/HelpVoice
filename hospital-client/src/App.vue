@@ -23,8 +23,14 @@ import { getDatabase, ref, onValue } from 'firebase/database'
       notifications_listener: null,
       appState: 0,
       visualized_alert: 0,
+      chosen_action: 0
     }},
     mounted() {
+      this.save_notifications_listener = listen('save_alert', (event)=>{
+        console.log("Yepa")
+        const notification = JSON.parse(event.payload)
+        this.store_notification(notification)
+      })
       this.notifications_listener = listen('new_alert', (event) => {
         
        event.payload = JSON.parse(event.payload)
@@ -32,13 +38,12 @@ import { getDatabase, ref, onValue } from 'firebase/database'
         const db = getDatabase()
         const settingsRef = ref(db, '/users/' +event.payload['user_id'])
         onValue(settingsRef, function(snapshot) {
-         
+          console.log("Hola")
           var childData = snapshot.val();
           event.payload.personal = childData
-        
+          emit('save_alert', event.payload)
         });
 
-        this.store_notification(event.payload)
         sendNotification({title: 'Nueva alerta', body:JSON.stringify(event.payload)})
 
       }
@@ -47,7 +52,9 @@ import { getDatabase, ref, onValue } from 'firebase/database'
       },
     methods: {
       store_notification: async function(notificationContent){
+        console.log("Reached")
         const notification_object = notificationContent
+        console.log(notification_object)
         this.numNotifications += 1;
         this.unots.push(notification_object)
         console.log("Notification correctly propagated")
@@ -62,8 +69,10 @@ import { getDatabase, ref, onValue } from 'firebase/database'
         {
           console.error(e)
         }
+
         const content = await readTextFile("./data/state.json", {dir: BaseDirectory.Desktop})
         const jsonContent = await JSON.parse(content)
+        console.log(jsonContent)
         this.numNotifications = jsonContent.numNotifications
         this.unots = jsonContent.unots
         this.onots = jsonContent.onots
@@ -100,13 +109,19 @@ import { getDatabase, ref, onValue } from 'firebase/database'
         }
         else
           this.visualized_alert = this.onots[alert_number]
-
+        
+        console.log(this.visualized_alert)
         this.appState = 1
       },
       send_message: function(body){
-        console.log("yepa")
-        console.log(body)
-        emit("send_rbmq", body)
+        const response = JSON.stringify({"user_id": body.user_id, 
+        "hospital":"Hospital la paz", 
+        'coordinates': [98.24, 54.03], 
+        "illness":this.visualize_alert.sickness_prediction, 
+        "action":this.chosen_action})
+        
+        console.log(response)
+        emit("send_rbmq", response)
       },
       alert_color(a) {
         if(a==0){
@@ -185,7 +200,6 @@ import { getDatabase, ref, onValue } from 'firebase/database'
           </div>
         </div>
         <div v-for="(alert, index) in this.onots" class="col-4">
-          
           <div class="card" style="min-height: 250px; max-height: 250px;">
             <div class="card-body" style="overflow: hidden;">
               <h5 class="card-title" :class="alert_color(alert.level_int)">{{alert.level}}</h5>
@@ -265,7 +279,7 @@ import { getDatabase, ref, onValue } from 'firebase/database'
               
               <hr class="my-4">
               <p class="lead">
-          <button class="btn btn-success btn-lg" href="#" role="button" style="margin-right: 1em;" v-on:click="this.send_message(this.visualized_alert.user_id)">Atender alerta</button>
+          <button class="btn btn-success btn-lg" href="#" role="button" style="margin-right: 1em;" v-on:click="this.appState = 2">Atender alerta</button>
           <button class="btn btn-danger btn-lg" href="#" role="button">Rechazar alerta</button>
           </p>
           </div>
@@ -279,7 +293,63 @@ import { getDatabase, ref, onValue } from 'firebase/database'
        
         </div>
           
+    </div>
+    <div v-if="this.appState == 2" class="col-9">
+      <div class="row">
+        <div class="jumbotron p-3">
+          <button type="button" class="btn btn-outline-secondary" v-on:click="this.appState=0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+          </svg>
+          Atrás
+          </button>
+          <br>
+          <br>
+          <h3>Vas a atender la alerta de {{this.visualized_alert.personal.name}}</h3>
+          <br>
+          <div class="container">
+            <div class="row">
+            <div class="col">
+
+            <div class="row ms-1">
+              <div class="col">
+                  <span class="text-muted">Dirección</span>
+                  <p>C. de Orense, 4, 28020 Madrid</p>
+              </div>
+              <div class="col">
+                <span class="text-muted">Contacto</span>
+               <p>{{this.visualized_alert.personal.phone}}</p>
+              </div>
+            </div>
+
+            <h5>Diagnostico</h5>
+            <div class="input-group">
+              <input type="text" class="form-control" v-model="this.visualized_alert.sickness_prediction" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            </div>
+            <h5>Acción</h5>
+            <div class="input-group">
+              <select v-model="this.chosen_action" class="custom-select" id="inputGroupSelect01">
+                <option selected>Choose...</option>
+                <option value="Llamada telefónica urgente">Llamada telefónica urgente</option>
+                <option value="Enviar ambulancia">Enviar ambulancia</option>
+              </select>
+            </div>
+            <hr class="my-4">
+            <p class="lead">
+          <button class="btn btn-lg btn-primary" href="#" role="button" style="margin-right: 1em;" v-on:click="this.send_message(this.visualized_alert)">Responder alerta</button>
+          </p>
+          </div>
+
+            <div class="col">
+              <MapeCom :coordinates="[visualized_alert.lon, visualized_alert.lat]" />
+            </div>
+          </div>
         </div>
+        </div>
+       
+        </div>
+          
+    </div>
       </div>
     </div>
 

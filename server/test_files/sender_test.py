@@ -12,7 +12,7 @@ audio_test_content = None
 with open('audio_test.txt') as audio_txt:
     audio_test_content = audio_txt.read()
 
-channel.basic_publish(exchange='', routing_key='patient_alerts', body=json.dumps({"client_id":1234, "lat":10.0, "lon":10.0, "audio":audio_test_content}))
+channel.basic_publish(exchange='', routing_key='patient_alerts', body=json.dumps({"client_id":"yERXYCKKtDN3b9aXNip4s9GWS1z1", "lat":10.0, "lon":10.0, "audio":audio_test_content}))
 
 
 connection.close()
