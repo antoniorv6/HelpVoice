@@ -24,11 +24,11 @@ def alertFamily():
     data = {
     "to":"cKVVzWkqRhCdM2bAvN7T_h:APA91bGaSOjJOsm-JLgNFfep-1pOOnUyGti7q2Sh5cgDYE0MNJk_pIJ_4nW5UNbQC7vnEs4qGnN21-RdxdzA7b0Zwx-1pyH1ebbK0oCO4z90TE-G3BM1AuTIULC7tWwIfU1HCRDQ-YDX",
     "notification":{
-        "title":"HelpVoice! - Nueva alerta",
-        "body":"Alberto Berenguer"
+        "title":"HelpVoice! - Actualización",
+        "body":"Ambulancia en camino"
     },
     "data":{
-        "lat":40.4477155,
+        "lat": 40.4477155,
         "lon": -3.6954323,
         "status": "Una ambulancia está en camino",
         "pred": "Rotura de cadera"
