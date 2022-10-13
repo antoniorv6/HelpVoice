@@ -36,7 +36,7 @@ def alertFamily():
         'Authorization': 'key=AAAAoZTf-J0:APA91bHCsxJymN-5ZVFPYzWJQ5ZaEBFC2gWhs2DLutcP6flxMVxTaZKXXVqNxtaUKeOOTgcJo5RTlJiZZGgjZDnR5jFtAFR_slJ_d9Gpf_eWzMUKSLEWvJ2mBl2oaOxE2DyjULNefI8r'
     }
 
-    now = datetime.datetime.now() + datetime.timedelta(hours=2)
+    now = datetime.datetime.now()
     hour = '{:02d}'.format(now.hour)
     minute = '{:02d}'.format(now.minute)
 
