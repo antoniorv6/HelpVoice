@@ -11,6 +11,7 @@ from base64 import b64encode
 import numpy as np
 import os
 import requests
+import datetime
 
 # Config usuario
 user_id = 'yERXYCKKtDN3b9aXNip4s9GWS1z1'
@@ -34,6 +35,11 @@ def alertFamily():
     headers={'Accept': 'application/json', 
         'Authorization': 'key=AAAAoZTf-J0:APA91bHCsxJymN-5ZVFPYzWJQ5ZaEBFC2gWhs2DLutcP6flxMVxTaZKXXVqNxtaUKeOOTgcJo5RTlJiZZGgjZDnR5jFtAFR_slJ_d9Gpf_eWzMUKSLEWvJ2mBl2oaOxE2DyjULNefI8r'
     }
+
+    now = datetime.datetime.now()
+    hour = '{:02d}'.format(now.hour)
+    minute = '{:02d}'.format(now.minute)
+
     data = {
     "to":"cKVVzWkqRhCdM2bAvN7T_h:APA91bGaSOjJOsm-JLgNFfep-1pOOnUyGti7q2Sh5cgDYE0MNJk_pIJ_4nW5UNbQC7vnEs4qGnN21-RdxdzA7b0Zwx-1pyH1ebbK0oCO4z90TE-G3BM1AuTIULC7tWwIfU1HCRDQ-YDX",
     "notification":{
@@ -42,7 +48,10 @@ def alertFamily():
     },
     "data":{
         "lat":40.4477155,
-        "lon": -3.6954323
+        "lon": -3.6954323,
+        "time": hour+":"+minute,
+        "status": "Esperando a ser atendida",
+        "pred": "---"
     }
 }
     requests.post('https://fcm.googleapis.com/fcm/send', json = data,
