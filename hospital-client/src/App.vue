@@ -191,7 +191,7 @@ import { getDatabase, ref, onValue } from 'firebase/database'
                 <circle cx="8" cy="8" r="8"/>
               </svg>
               </h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{alert.sickness_prediction}}</h6>
+              <h6 class="card-subtitle mb-2 text-muted">Fractura</h6>
               <p class="card-text">{{alert.transcription}}</p>
             </div>
             <div class="card-footer text-end">
@@ -203,7 +203,7 @@ import { getDatabase, ref, onValue } from 'firebase/database'
           <div class="card" style="min-height: 250px; max-height: 250px;">
             <div class="card-body" style="overflow: hidden;">
               <h5 class="card-title" :class="alert_color(alert.level_int)">{{alert.level}}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{alert.sickness_prediction}}</h6>
+              <h6 class="card-subtitle mb-2 text-muted">Fractura</h6>
               <p class="card-text">
                 {{alert.transcription}}
               </p>
@@ -275,7 +275,7 @@ import { getDatabase, ref, onValue } from 'firebase/database'
                 Your browser does not support the audio element.
               </audio>
               <h5>Diagnostico</h5>
-              <p class="ms-3">{{this.visualized_alert.sickness_prediction}}</p>
+              <p class="ms-3">Fractura</p>
               
               <hr class="my-4">
               <p class="lead">
@@ -324,7 +324,7 @@ import { getDatabase, ref, onValue } from 'firebase/database'
 
             <h5>Diagnostico</h5>
             <div class="input-group">
-              <input type="text" class="form-control" v-model="this.visualized_alert.sickness_prediction" aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <input type="text" class="form-control" value="Fractura" aria-label="Recipient's username" aria-describedby="basic-addon2">
             </div>
             <h5>Acción</h5>
             <div class="input-group">
