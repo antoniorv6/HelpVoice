@@ -41,7 +41,7 @@ def alertFamily():
     minute = '{:02d}'.format(now.minute)
 
     data = {
-    "to":"cKVVzWkqRhCdM2bAvN7T_h:APA91bGaSOjJOsm-JLgNFfep-1pOOnUyGti7q2Sh5cgDYE0MNJk_pIJ_4nW5UNbQC7vnEs4qGnN21-RdxdzA7b0Zwx-1pyH1ebbK0oCO4z90TE-G3BM1AuTIULC7tWwIfU1HCRDQ-YDX",
+    "to":"eD4muzh_RO-uEjMGwsHQgE:APA91bHsTsbzaoM4FS5Etk6FOuDTIOFxz5B3xJrRK7SoT_XoJkYHa3nLUYx3FhWsLER58J_Voo5K2awfqf4ybYmnjbKLlKQlqLCVR0oMz8SiGzveR0oOwxZKK8c9a9FNRx4kGQmjual2",
     "notification":{
         "title":"HelpVoice! - Nueva alerta",
         "body":"Alberto Berenguer"
